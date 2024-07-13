@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import echo from './echo';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  useEffect(() => {
+        const userId = `1a210c78-54a3-4ac2-9dcd-5aafb60f0b39`;
+        const channel = echo.private('chat.' + userId); 
+
+        channel.listen('NewMessageEvent', (e) => {
+            console.log('Received data:', e);
+        });
+
+        return () => {
+            channel.stopListening('NewMessageEvent');
+        };
+    }, []);
+
+    return <div className="App">Listening events...</div>;
 }
 
 export default App;
+
